@@ -1,6 +1,7 @@
 TARGET=myRT
 
 CONFIG+=c++14
+CONFIG+=-pthread
 
 OBJECTS_DIR=obj
 
@@ -12,7 +13,11 @@ SOURCES+=$$PWD/src/main.cpp \
          $$PWD/src/Parser.cpp \
          $$PWD/src/IsectData.cpp \
          $$PWD/src/Film.cpp \
-         $$PWD/src/Camera.cpp
+         $$PWD/src/Camera.cpp \
+         $$PWD/src/Primative.cpp \
+         $$PWD/src/GeometricPrim.cpp \
+         $$PWD/src/Meshes.cpp \
+         $$PWD/src/Renderer.cpp
 
 HEADERS+=$$PWD/include/Triangle.hpp \
          $$PWD/include/TriangleMesh.hpp \
@@ -21,7 +26,11 @@ HEADERS+=$$PWD/include/Triangle.hpp \
          $$PWD/include/Parser.hpp \
          $$PWD/include/IsectData.hpp \
          $$PWD/include/Film.hpp \
-         $$PWD/include/Camera.hpp
+         $$PWD/include/Camera.hpp \
+         $$PWD/include/Primative.hpp \
+         $$PWD/include/GeometricPrim.hpp \
+         $$PWD/include/Meshes.hpp \
+         $$PWD/include/Renderer.hpp
 
 include($(HOME)/NGL/UseNGL.pri)
 

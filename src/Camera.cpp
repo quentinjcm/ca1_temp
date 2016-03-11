@@ -2,6 +2,7 @@
 
 #include <ngl/Mat4.h>
 #include <ngl/Vec3.h>
+#include <ngl/Util.h>
 #include <ngl/NGLStream.h>
 
 #include "Camera.hpp"
@@ -9,17 +10,17 @@
 #include "Ray.hpp"
 
 Camera::Camera(ngl::Vec3 _pos,
-               ngl::Vec3 _aim,
+               ngl::Vec3 _lookAt,
                ngl::Vec3 _up,
                float _focalLength,
                Film *_film):
-  m_focalLength(_focalLength),
-  m_film(_film)
+  m_film(_film),
+  m_focalLength(_focalLength)
 {
   //generating a transformation matrix to transform from
   //camera space to world space
   //generate an orthonormal frame:
-  ngl::Vec3 d = _aim;
+  ngl::Vec3 d = _lookAt - _pos;
   ngl::Vec3 r = _up.cross(d);
   ngl::Vec3 u = d.cross(r);
   d.normalize();
@@ -41,7 +42,11 @@ Camera::Camera(ngl::Vec3 _pos,
                       0, 0, 1, _pos[2],
                       0, 0, 0,  1);
 
+
   //combining transformation and roataion
+
+  m_rotate = rotate;
+
   m_camToWorld = translate * rotate ;
 
 }
@@ -49,13 +54,24 @@ Camera::Camera(ngl::Vec3 _pos,
 void Camera::generateRay(int _x, int _y, Ray *_ray)
 {
   ngl::Vec4 origin(0, 0, 0, 1);
-  ngl::Vec4 direction(_x - m_film->m_filmWidth/2,
-                      _y- m_film->m_filmHeight/2,
-                      m_focalLength);
+
+  float aspectRatio = m_film->m_filmWidth / m_film->m_filmHeight;//move to film
+
+  float xNDC = ((float)_x + 0.5)/m_film->m_filmWidth;
+  float yNDC = ((float)_y + 0.5)/m_film->m_filmHeight;
+
+  float xScreen = ((xNDC * 2) - 1) * aspectRatio;
+  float yScreen = 1 - (yNDC * 2);
+
+  ngl::Vec4 direction(xScreen,
+                      yScreen,
+                      1,
+                      1);
 
 
   origin = m_camToWorld * origin;
-  direction = m_camToWorld * direction;
+  direction = m_rotate * direction;
+
   direction.normalize();
 
   ngl::Vec3 originOut;

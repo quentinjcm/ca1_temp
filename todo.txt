@@ -1,0 +1,9 @@
+split renderer into renderer and render tasks
+
+comment fully functional classes
+
+intersection to check bbox before checking the mesh inside in triangleMesh
+
+set pixel function in film needs to clamp values
+
+add light class

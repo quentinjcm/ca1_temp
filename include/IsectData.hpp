@@ -9,6 +9,7 @@ public:
   IsectData();
   float m_t;
   ngl::Vec3 m_pos;
+  ngl::Vec3 m_n;
 };
 
 #endif//__ISECTDATA_HPP__

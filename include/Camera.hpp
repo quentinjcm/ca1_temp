@@ -12,15 +12,18 @@ class Camera
 {
 public:
   Camera(ngl::Vec3 _pos,
-         ngl::Vec3 _aim,
+         ngl::Vec3 _lookAt,
          ngl::Vec3 _up,
          float _focalLength,
          Film *_film);
   void generateRay(int _x, int _y, Ray *_ray);
+  Film *m_film;
+  ngl::Mat4 m_rotate;
   ngl::Mat4 m_camToWorld;
 private:
+
   float m_focalLength;
-  Film *m_film;
+
 
 
 };
