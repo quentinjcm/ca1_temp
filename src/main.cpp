@@ -27,7 +27,7 @@ int main()
 
 
 
-  Camera cam(pos, lookAt, up, 1, &film);
+  Camera cam(pos, lookAt, up, 90.0, &film);
 
   Ray newRay;
   cam.generateRay(200, 200, &newRay);
@@ -50,14 +50,16 @@ int main()
 
   //film.show();
 
-  std::thread task(&Film::show, &film);
+  //std::thread task(&Film::show, &film);
 
   auto mesh = Meshes::scene1();
 
-  Renderer new_renderer(&cam, mesh);
+  Renderer new_renderer(&cam, &film, mesh);
 
   new_renderer.renderImage();
-  task.join();
+  //task.join();
+
+  film.show();
 
   return EXIT_SUCCESS;
 }

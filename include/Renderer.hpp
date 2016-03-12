@@ -9,9 +9,10 @@
 class Renderer
 {
 public:
-  Renderer(Camera *_cam, std::shared_ptr<TriangleMesh> _mesh);
+  Renderer(Camera *_cam, Film *_film, std::shared_ptr<TriangleMesh> _mesh);
   void renderImage();
 private:
+  Film *m_film;
   Camera *m_cam;
   std::shared_ptr<TriangleMesh> m_mesh;
 };

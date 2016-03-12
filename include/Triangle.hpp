@@ -7,15 +7,14 @@
 #include "Ray.hpp"
 #include "IsectData.hpp"
 
-//----------------------------------------------------------------------------------------------------------------------
 /// @file Triangle.hpp
-/// @brief The Triangle class represents triangles contained in a TriangleMesh
+/// @brief File contaiing the Triangle class
 /// @author Quentin Corker-Marin
 /// @version 1.0
 /// @date 11/03/2016
 /// @class Triangle
-/// @brief a class to represent triangles andimplment ray/triangle intersections.
-//----------------------------------------------------------------------------------------------------------------------
+/// @brief The Triangle class is used to represent triangles and implment
+/// ray/triangle intersections.
 
 class Triangle
 {
@@ -46,23 +45,52 @@ public:
   /// can probably be taken out as it was only needed for debuging early on
   void printData();
 
+  /// @brief Vertex 0 of the triangle
   const ngl::Vec3 m_v0;
+
+  /// @brief Vertex 1 of the triangle
   const ngl::Vec3 m_v1;
+
+  /// @brief Vertex 2 of the triangle
   const ngl::Vec3 m_v2;
+
+  /// @brief Normal associated with vertex 0
   const ngl::Vec3 m_n0;
+
+  /// @brief Normal associated with vertex 1
   const ngl::Vec3 m_n1;
+
+  /// @brief Normal associated with vertex 3
   const ngl::Vec3 m_n2;
 
   private:
+  /// @brief Normal to the plane formed from the 3 verticies, calculated at construction
   ngl::Vec3 m_n;
+
+  /// @brief A constant associated with the plane used in intersection calculations.
+  /// A plane can be represented using the normal and this constand in the equation
+  /// N.P + d = 0 where N is the normal, P is any point on the plane and d is a constant
+  /// for the plane.
   float m_d;
+
+  /// @brief One of the minor axes of the normal stored as either 0, 1 or 2. It is
+  /// calulated at construction and used to project the triangle onto a plane to make
+  /// the intersection calulation faster.
   int m_i1;
+
+  /// @brief The second minor axis of the normal.
   int m_i2;
 
+  /// @brief A function that calulated the normal to the plane from the 3 verticies passed in.
   void calcN();
+
+  /// @brief A function that calulated the constant d in N.P + d = 0 for the plane
   void calcD();
+
+  /// @brief Calculates the dominant axis for the triangles normal. The dominant axis is
+  /// the maximum of the absolute x y and x values. This function stores the two remaining
+  /// axes in m_i1 and m_i2.
   void calcDominantAxis();
 };
-
 
 #endif //__TRIANGLE_HPP__

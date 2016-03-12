@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 #include <ngl/Mat4.h>
 #include <ngl/Vec3.h>
@@ -9,77 +10,80 @@
 #include "Film.hpp"
 #include "Ray.hpp"
 
+/// @file Camera.cpp
+/// @brief implementation file for the Camera class
+
 Camera::Camera(ngl::Vec3 _pos,
                ngl::Vec3 _lookAt,
                ngl::Vec3 _up,
-               float _focalLength,
+               float _fov,
                Film *_film):
-  m_film(_film),
-  m_focalLength(_focalLength)
+  m_screenWidth(_film->getFilmWidth()),
+  m_screenHeight(_film->getFilmHeight()),
+  m_aspectRatio((float)m_screenWidth / (float)m_screenHeight),
+  m_fovMult(tan(_fov * M_PI/360))
 {
   //generating a transformation matrix to transform from
   //camera space to world space
-  //generate an orthonormal frame:
+  //generate an orthonormal frame for the camera:
   ngl::Vec3 d = _lookAt - _pos;
   ngl::Vec3 r = _up.cross(d);
   ngl::Vec3 u = d.cross(r);
   d.normalize();
   r.normalize();
   u.normalize();
-  //generate a matrix that can transform from points in the
-  //cameras frame to points in world space
+  //generate a matrix that can transform from points in
+  //camera space to points in world space
 
   //matrix to allign roataions
   ngl::Mat4 rotate(r[0], u[0], d[0], 0,
                    r[1], u[1], d[1], 0,
-                   r[2], u[2], d[2], 0, //-d[2] to do with handedness of the coordinate system
+                   r[2], u[2], d[2], 0,
                    0,    0,    0,    1);
-  //rotate.transpose();
 
   //matrix for position transformations
   ngl::Mat4 translate(1, 0, 0, _pos[0],
                       0, 1, 0, _pos[1],
                       0, 0, 1, _pos[2],
                       0, 0, 0,  1);
-
-
-  //combining transformation and roataion
-
+  //I store the roataion seperately because that is needed on its own
+  //to roatate the direction vector of rays without translating them
   m_rotate = rotate;
-
   m_camToWorld = translate * rotate ;
-
 }
 
 void Camera::generateRay(int _x, int _y, Ray *_ray)
 {
+  //init originposition
   ngl::Vec4 origin(0, 0, 0, 1);
 
-  float aspectRatio = m_film->m_filmWidth / m_film->m_filmHeight;//move to film
+  //convert pixel values to normalised device coordinates
+  float xNDC = ((float)_x + 0.5) / m_screenWidth;
+  float yNDC = ((float)_y + 0.5) / m_screenHeight;
 
-  float xNDC = ((float)_x + 0.5)/m_film->m_filmWidth;
-  float yNDC = ((float)_y + 0.5)/m_film->m_filmHeight;
+  //convert from NDC to screen space
+  float xScreen = -((xNDC * 2) - 1) * m_aspectRatio * m_fovMult;
+  float yScreen = (1 - (yNDC * 2)) * m_fovMult;
 
-  float xScreen = ((xNDC * 2) - 1) * aspectRatio;
-  float yScreen = 1 - (yNDC * 2);
-
+  //set the direction for the ray
   ngl::Vec4 direction(xScreen,
                       yScreen,
                       1,
                       1);
 
-
+  //transform origin and direction into world space
   origin = m_camToWorld * origin;
   direction = m_rotate * direction;
 
   direction.normalize();
 
+  //convert from ngl::Vec4 to ngl::Vec3
   ngl::Vec3 originOut;
   ngl::Vec3 directionOut;
-
   originOut.set(origin);
   directionOut.set(direction);
 
+  //pass origin and direction to the ray
   _ray->m_direction = directionOut;
   _ray->m_origin = originOut;
 }

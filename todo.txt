@@ -7,3 +7,13 @@ intersection to check bbox before checking the mesh inside in triangleMesh
 set pixel function in film needs to clamp values
 
 add light class
+
+write adTri function and move triangles and xbox to private ( also need to re write meshes to use adder insight of using straight to triangles)
+
+extract the sdl window from the film class
+
+clamp values coming into the film
+
+implement fov for the camera
+
+sort out flip in x direction in camera 

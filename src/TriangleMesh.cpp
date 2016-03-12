@@ -8,6 +8,9 @@
 #include "Ray.hpp"
 #include "BBox.hpp"
 
+///@file TriangleMesh.cpp
+///@brief Implementation file for the TriangleMesh class
+
 bool TriangleMesh::intersect(const Ray &_ray, IsectData *_intersection)
 {
   if (intersectBBox(_ray)){
