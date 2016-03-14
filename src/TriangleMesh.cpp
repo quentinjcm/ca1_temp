@@ -21,7 +21,7 @@ bool TriangleMesh::intersect(const Ray &_ray, IsectData *_intersection)
 
 bool TriangleMesh::intersectBBox(const Ray &_ray)
 {
-  return true;
+  return m_meshBound.intersect(_ray);
 }
 
 bool TriangleMesh::intersectMesh(const Ray &_ray, IsectData *_intersection)

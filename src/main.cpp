@@ -22,7 +22,7 @@ int main()
 
   Film film(401, 401);
 
-  ngl::Vec3 pos(0, 0, 20);
+  ngl::Vec3 pos(0, 0, 0);
   ngl::Vec3 lookAt(0, 0, 100);
   ngl::Vec3  up(0, 1, 0);
 
@@ -30,36 +30,39 @@ int main()
 
   Camera cam(pos, lookAt, up, 90.0, &film);
 
-  Ray newRay;
-  cam.generateRay(200, 200, &newRay);
-  std::cout << newRay.m_origin << newRay.m_direction << std::endl;
+  Ray newRay(ngl::Vec3(0, 0, 0), ngl::Vec3(0, 0, 1));
+  ngl::Vec3 a(-300, -300, -300);
+  ngl::Vec3 b(300, 300, 300);
+  BBox aBox(a, b);
 
-  //making triangle
-  ngl::Vec3 v1(0, 0, 0);
-  ngl::Vec3 v2(1, 0, 0);
-  ngl::Vec3 v3(0, 1, 0);
-  Triangle t1(v1, v2, v3);
-  std::shared_ptr<TriangleMesh> m1 = std::make_shared<TriangleMesh>();
-  m1->addTri(t1);
-  //m1->printData();
+  if (aBox.intersect(newRay)){
+      std::cout << "hit" << std::endl;
+  }
+  else std::cout << "miss" << std::endl;
+
+
+
+
+  //cam.generateRay(200, 200, &newRay);
+  std::cout << newRay.m_origin << newRay.m_direction << newRay.m_invDirection << std::endl;
+
 
   IsectData intersection;
-
-
-  //m1->intersect(newRay, &intersection);
 
   //film.show();
 
   //std::thread task(&Film::show, &film);
 
   auto mesh = Meshes::scene1();
+  if (mesh->m_meshBound.intersect(newRay)){
+      std::cout << "hit" << std::endl;
+  }
 
   Renderer new_renderer(&cam, &film, mesh);
 
-  new_renderer.renderImage();
+  //new_renderer.renderImage();
   //task.join();
 
-  film.show();
-
+  //film.show();
   return EXIT_SUCCESS;
 }
