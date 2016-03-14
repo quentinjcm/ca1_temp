@@ -16,6 +16,7 @@
 #include "GeometricPrim.hpp"
 #include "Meshes.hpp"
 #include "Renderer.hpp"
+#include "BBox.hpp"
 int main()
 {
 
@@ -39,9 +40,8 @@ int main()
   ngl::Vec3 v3(0, 1, 0);
   Triangle t1(v1, v2, v3);
   std::shared_ptr<TriangleMesh> m1 = std::make_shared<TriangleMesh>();
-  m1->m_tris.push_back(t1);
+  m1->addTri(t1);
   //m1->printData();
-
 
   IsectData intersection;
 

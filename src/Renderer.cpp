@@ -26,9 +26,10 @@ void Renderer::renderImage()
 
       //intersect ray with scene
       if (m_mesh->intersect(newRay, &intersection)){
-        m_film->setPixle(x, y, intersection.m_n[0]*254,
-                                intersection.m_n[1]*254,
-                                intersection.m_n[2]*254, 255);
+        m_film->setPixle(x, y, intersection.m_n[0]*255,
+                               intersection.m_n[1]*255,
+                               intersection.m_n[2]*255,
+                               255);
       }
       else{
         m_film->setPixle(x, y, 255, 255, 255, 255);

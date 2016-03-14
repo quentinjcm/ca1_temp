@@ -5,6 +5,8 @@
 
 #include <ngl/Vec3.h>
 
+#include "Ray.hpp"
+
 class BBox
 {
 public:
@@ -12,6 +14,7 @@ public:
   BBox(const ngl::Vec3 &_p);
   BBox(const ngl::Vec3 &_p1, ngl::Vec3 &_p2);
   void addPoint( const ngl::Vec3 &_p);
+  bool intersect(const Ray &_ray);
   void printData();
 private:
   ngl::Vec3 m_pMin;

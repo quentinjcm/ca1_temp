@@ -13,9 +13,12 @@ Film::Film(int _w, int _h):
   init();
 }
 
-void Film::setPixle(int _x, int _y, Uint8 _r, Uint8 _g, Uint8 _b, Uint8 _a)
+void Film::setPixle(int _x, int _y, int _r, int _g, int _b, int _a)
 {
-  SDL_Color temp{_r, _g, _b, _a};
+  SDL_Color temp{clipColour(_r),
+                 clipColour(_g),
+                 clipColour(_b),
+                 clipColour(_a)};
   m_pixelArr[_x + m_filmWidth * _y] = temp;
 }
 
@@ -74,5 +77,9 @@ void Film::drawPixels()
       SDL_RenderDrawPoint(m_renderer, x, y);
     }
   }
+}
+
+Uint8 Film::clipColour(int n) {
+  return (Uint8)std::max(0, std::min(n, 255));
 }
 

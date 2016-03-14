@@ -28,6 +28,9 @@ public:
 
   /// @brief dirction of the ray
   ngl::Vec3 m_direction;
+
+  /// @brief 1/direction of the ray
+  ngl::Vec3 m_invDirection;
 };
 
 #endif//__RAY_HPP__

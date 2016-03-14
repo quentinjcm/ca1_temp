@@ -95,9 +95,10 @@ bool Triangle::intersect(const Ray &_ray, IsectData *_intersection)
 
     if (alpha >= 0 & beta >= 0 and (alpha + beta) <=1){
       //filling the intersction data structure with data about the intersection point
+      ngl::Vec3 interpolatedNormal = m_n0 * (1 - (alpha + beta)) + m_n1 * alpha + m_n2 * beta;
       _intersection->m_t = t;
       _intersection->m_pos = p;
-      _intersection->m_n = m_n;
+      _intersection->m_n = interpolatedNormal;
       return true;
     }
     else{
