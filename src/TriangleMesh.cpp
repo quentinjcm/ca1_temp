@@ -2,6 +2,7 @@
 #include <vector>
 
 #include <ngl/Vec3.h>
+#include <ngl/NGLStream.h>
 
 #include "TriangleMesh.hpp"
 #include "Triangle.hpp"

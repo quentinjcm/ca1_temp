@@ -17,6 +17,7 @@
 #include "Meshes.hpp"
 #include "Renderer.hpp"
 #include "BBox.hpp"
+#include "Material.hpp"
 int main()
 {
 
@@ -31,15 +32,6 @@ int main()
   Camera cam(pos, lookAt, up, 90.0, &film);
 
   Ray newRay(ngl::Vec3(0, 0, 0), ngl::Vec3(0, 0, 1));
-  ngl::Vec3 a(-300, -300, -300);
-  ngl::Vec3 b(300, 300, 300);
-  BBox aBox(a, b);
-
-  if (aBox.intersect(newRay)){
-      std::cout << "hit" << std::endl;
-  }
-  else std::cout << "miss" << std::endl;
-
 
 
 
@@ -54,15 +46,16 @@ int main()
   //std::thread task(&Film::show, &film);
 
   auto mesh = Meshes::scene1();
-  if (mesh->m_meshBound.intersect(newRay)){
-      std::cout << "hit" << std::endl;
-  }
+  auto green = std::make_shared<Material>();
+  green->m_diffuseColour = SDL_Color{0, 255, 0, 255};
 
-  Renderer new_renderer(&cam, &film, mesh);
+  std::shared_ptr<Primative> scenePrim = std::make_shared<GeometricPrim>(mesh, green);
 
-  //new_renderer.renderImage();
+  Renderer new_renderer(&cam, &film, scenePrim);
+
+  new_renderer.renderImage();
   //task.join();
 
-  //film.show();
+  film.show();
   return EXIT_SUCCESS;
 }

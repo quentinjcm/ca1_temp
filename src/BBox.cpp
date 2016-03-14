@@ -56,9 +56,7 @@ bool BBox::intersect(const Ray &_ray)
     tMax = std::min(tMax, std::max(t1, t2));
   }
   if (tMax >= tMin){
-    std::cout << "hit bbox" << std::endl;
     return true;
   }
-  std::cout << "miss bbox" << std::endl;
   return false;
 }
